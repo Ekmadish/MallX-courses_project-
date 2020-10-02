@@ -18,7 +18,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  # sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -54,16 +55,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  fonts:
-    - family: Signatra
-      fonts:
-        - asset: assets/fonts/Signatra.ttf
-
-  assets:
-    - images/welcome.png
-    - images/login.png
-    - images/admin.png
-    - images/cash.png
+  
 
   # To add assets to your application, add an assets section, like this:
   # assets:

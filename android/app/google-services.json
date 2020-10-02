@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "245891491005",
+    "firebase_url": "https://malx-6fd7f.firebaseio.com",
+    "project_id": "malx-6fd7f",
+    "storage_bucket": "malx-6fd7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245891491005:android:c0bce489a06016acb343d4",
+        "android_client_info": {
+          "package_name": "com.example.malX"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "245891491005-t3vlakiv9m4vh7jpofdim2m2naph98r9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPOfoxd6CY8vP7blLSJXAXvJoR92wVTFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "245891491005-t3vlakiv9m4vh7jpofdim2m2naph98r9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
