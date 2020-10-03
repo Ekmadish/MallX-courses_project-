@@ -7,7 +7,7 @@ class AuthenticScreen extends StatefulWidget {
   _AuthenticScreenState createState() => _AuthenticScreenState();
 }
 
-final String title = 'MAL_X';
+final String title = 'Mall_x';
 
 class _AuthenticScreenState extends State<AuthenticScreen> {
   @override
@@ -18,8 +18,12 @@ class _AuthenticScreenState extends State<AuthenticScreen> {
         appBar: AppBar(
           flexibleSpace: Container(
             decoration: BoxDecoration(
-              gradient:
-                  LinearGradient(colors: [Colors.lightBlue, Colors.lightBlue]),
+              gradient: LinearGradient(
+                  colors: [Colors.grey, Colors.green],
+                  begin: const FractionalOffset(0.0, 0.0),
+                  end: const FractionalOffset(0.0, 0.0),
+                  stops: [0.0, 1.0],
+                  tileMode: TileMode.clamp),
             ),
           ),
           title: Text(
@@ -52,9 +56,11 @@ class _AuthenticScreenState extends State<AuthenticScreen> {
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-                colors: [Colors.black, Colors.black],
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft),
+                colors: [Colors.grey, Colors.green],
+                begin: const FractionalOffset(0.0, 0.0),
+                end: const FractionalOffset(0.0, 0.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp),
           ),
           child: TabBarView(children: [
             Login(),

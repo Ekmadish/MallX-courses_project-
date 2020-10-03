@@ -21,7 +21,6 @@ class _RegisterState extends State<Register> {
   final TextEditingController _emailInput = TextEditingController();
   final TextEditingController _passwordInput = TextEditingController();
   final TextEditingController _repasswordInput = TextEditingController();
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String userImageUrl = '';
@@ -187,7 +186,8 @@ class _RegisterState extends State<Register> {
       'uid': fUser.uid,
       'name': _nameInput.text.trim(),
       'email': fUser.email,
-      'url': userImageUrl
+      'url': userImageUrl,
+      EcommerceApp.userCartList: ["garbageValue"]
     });
 
     await EcommerceApp.sharedPreferences
