@@ -84,7 +84,7 @@ class MyDrawer extends StatelessWidget {
                   onTap: () {
                     Route route =
                         MaterialPageRoute(builder: (c) => StoreHome());
-                    Navigator.push(context, route);
+                    Navigator.pushReplacement(context, route);
                   },
                 ),
                 Divider(
@@ -103,7 +103,7 @@ class MyDrawer extends StatelessWidget {
                   ),
                   onTap: () {
                     Route route = MaterialPageRoute(builder: (c) => MyOrders());
-                    Navigator.push(context, route);
+                    Navigator.pushReplacement(context, route);
                   },
                 ),
                 Divider(
@@ -122,7 +122,7 @@ class MyDrawer extends StatelessWidget {
                   ),
                   onTap: () {
                     Route route = MaterialPageRoute(builder: (c) => CartPage());
-                    Navigator.push(context, route);
+                    Navigator.pushReplacement(context, route);
                   },
                 ),
                 Divider(
@@ -142,7 +142,7 @@ class MyDrawer extends StatelessWidget {
                   onTap: () {
                     Route route =
                         MaterialPageRoute(builder: (c) => SearchProduct());
-                    Navigator.push(context, route);
+                    Navigator.pushReplacement(context, route);
                   },
                 ),
                 Divider(
@@ -162,7 +162,7 @@ class MyDrawer extends StatelessWidget {
                   onTap: () {
                     Route route =
                         MaterialPageRoute(builder: (c) => AddAddress());
-                    Navigator.push(context, route);
+                    Navigator.pushReplacement(context, route);
                   },
                 ),
                 Divider(
