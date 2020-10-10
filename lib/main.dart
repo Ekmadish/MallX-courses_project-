@@ -3,9 +3,14 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:malX/Address/address.dart';
 import 'package:malX/Authentication/authenication.dart';
 import 'package:malX/Config/config.dart';
+import 'package:malX/Counters/cartitemcounter.dart';
+import 'package:malX/Counters/changeAddresss.dart';
+import 'package:malX/Counters/totalMoney.dart';
 import 'package:malX/Store/storehome.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
@@ -20,13 +25,21 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'malX',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: Colors.green,
-        ),
-        home: SplashScreen());
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (c) => CartItemCounter()),
+        ChangeNotifierProvider(create: (c) => CartItemCounter()),
+        ChangeNotifierProvider(create: (c) => AddressChanger()),
+        ChangeNotifierProvider(create: (c) => TotalAmount()),
+      ],
+      child: MaterialApp(
+          title: 'malX',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primaryColor: Colors.green,
+          ),
+          home: SplashScreen()),
+    );
   }
 }
 

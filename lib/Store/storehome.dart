@@ -61,11 +61,12 @@ class _StoreHomeState extends State<StoreHome> {
                       Icon(
                         Icons.brightness_1,
                         size: 20,
-                        color: Colors.white,
+                        color: Colors.red,
                       ),
                       Positioned(
                           top: 3.0,
                           bottom: 4.0,
+                          left: 3,
                           child: Consumer<CartItemCounter>(
                               builder: (context, counter, _) {
                             return Text(
