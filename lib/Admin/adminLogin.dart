@@ -116,8 +116,6 @@ class _AdminSignInScreenState extends State<AdminSignInScreen> {
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
-
-              
               icon: Icon(
                 Icons.nature_people,
                 color: Colors.blue,

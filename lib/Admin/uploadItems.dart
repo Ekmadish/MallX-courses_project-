@@ -194,9 +194,9 @@ class _UploadPageState extends State<UploadPage>
         ),
         actions: [
           FlatButton(
-            onPressed: () => print("object"),
+            onPressed: upLoading ? null : () => uploadImmageAndsaveDb(),
             child: Text(
-              "Add Product",
+              "Add ",
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 16.0,
@@ -207,7 +207,7 @@ class _UploadPageState extends State<UploadPage>
       ),
       body: ListView(
         children: [
-          upLoading ? linearProgress() : Text(""),
+          upLoading ? linearProgress() : Text(" "),
           Container(
             height: 230.0,
             width: MediaQuery.of(context).size.width * 0.8,
@@ -322,5 +322,48 @@ class _UploadPageState extends State<UploadPage>
       _titleController.clear();
       _shortinfoController.clear();
     });
+  }
+
+  uploadImmageAndsaveDb() async {
+    setState(() {
+      upLoading = true;
+    });
+
+    String imageDownloadUrl = await uploadItemImage(file);
+    saveItemInfo(imageDownloadUrl);
+  }
+
+  saveItemInfo(String url) {
+    final itemsRef = Firestore.instance.collection("items");
+    itemsRef.document(productId).setData({
+      "shortInfo": _shortinfoController.text.trim(),
+      "longDescription": _discrptionController.text.trim(),
+      "price": _priceController.text.trim(),
+      "publishedDate": DateTime.now(),
+      "status": "availa",
+      "thumbnailUrl": url,
+      "title": _titleController.text.trim(),
+    });
+
+    setState(() {
+      file = null;
+      upLoading = false;
+      productId = DateTime.now().millisecondsSinceEpoch.toString();
+      _discrptionController.clear();
+      _priceController.clear();
+      _titleController.clear();
+      _shortinfoController.clear();
+    });
+  }
+
+  Future<String> uploadItemImage(mFileImage) async {
+    final StorageReference storageReference =
+        FirebaseStorage.instance.ref().child("Items");
+    StorageUploadTask uploadTask =
+        storageReference.child("product_$productId.jpg").putFile(mFileImage);
+
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    String downloadurl = await taskSnapshot.ref.getDownloadURL();
+    return downloadurl;
   }
 }
