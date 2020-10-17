@@ -338,7 +338,7 @@ class _UploadPageState extends State<UploadPage>
     itemsRef.document(productId).setData({
       "shortInfo": _shortinfoController.text.trim(),
       "longDescription": _discrptionController.text.trim(),
-      "price": _priceController.text.trim(),
+      "price": int.parse(_priceController.text),
       "publishedDate": DateTime.now(),
       "status": "availa",
       "thumbnailUrl": url,
