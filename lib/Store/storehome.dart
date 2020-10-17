@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:malX/Admin/adminOrderCard.dart';
 import 'package:malX/Counters/cartitemcounter.dart';
 import 'package:malX/Store/cart.dart';
+import 'package:malX/Store/product_page.dart';
 import 'package:provider/provider.dart';
 import '../Widgets/loadingWidget.dart';
 import '../Widgets/myDrawer.dart';
@@ -127,6 +128,12 @@ class _StoreHomeState extends State<StoreHome> {
 Widget sourceInfo(ItemModel model, BuildContext context,
     {Color background, removeCartFunction}) {
   return InkWell(
+    onTap: () {
+      Route route = MaterialPageRoute(
+        builder: (c) => ProductPage(iteModel: model),
+      );
+      Navigator.push(context, route);
+    },
     splashColor: Colors.lightGreenAccent,
     child: Padding(
       padding: EdgeInsets.all(6.0),
