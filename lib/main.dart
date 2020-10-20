@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:malX/Address/address.dart';
 import 'package:malX/Authentication/authenication.dart';
 import 'package:malX/Config/config.dart';
+import 'package:malX/Counters/ItemQuantity.dart';
 import 'package:malX/Counters/cartitemcounter.dart';
 import 'package:malX/Counters/changeAddresss.dart';
 import 'package:malX/Counters/totalMoney.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (c) => CartItemCounter()),
-        ChangeNotifierProvider(create: (c) => CartItemCounter()),
+        ChangeNotifierProvider(create: (c) => ItemQuantityCounter()),
         ChangeNotifierProvider(create: (c) => AddressChanger()),
         ChangeNotifierProvider(create: (c) => TotalAmount()),
       ],

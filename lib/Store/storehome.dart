@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:malX/Admin/adminOrderCard.dart';
+import 'package:malX/Config/config.dart';
 import 'package:malX/Counters/cartitemcounter.dart';
 import 'package:malX/Store/cart.dart';
 import 'package:malX/Store/product_page.dart';
@@ -68,8 +69,8 @@ class _StoreHomeState extends State<StoreHome> {
                         ),
                         Positioned(
                             top: 3.0,
-                            bottom: 4.0,
-                            left: 3,
+                            bottom: 3.0,
+                            left: 6.5,
                             child: Consumer<CartItemCounter>(
                                 builder: (context, counter, _) {
                               return Text(
@@ -293,6 +294,28 @@ Widget sourceInfo(ItemModel model, BuildContext context,
                     ],
                   ),
                   Flexible(child: Container()),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: removeCartFunction == null
+                        ? IconButton(
+                            icon: Icon(
+                              Icons.add_shopping_cart,
+                              color: Colors.green,
+                            ),
+                            onPressed: () {
+                              checkItemInCart(model.shortInfo, context);
+                            })
+                        : IconButton(
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.green,
+                            ),
+                            onPressed: null),
+                  ),
+                  Divider(
+                    height: 5,
+                    color: Colors.green,
+                  )
                 ],
               ),
             )
@@ -307,4 +330,27 @@ Widget card({Color primaryColor = Colors.redAccent, String imgPath}) {
   return Container();
 }
 
-void checkItemInCart(String productID, BuildContext context) {}
+void checkItemInCart(String productID, BuildContext context) {
+  EcommerceApp.sharedPreferences
+          .getStringList(EcommerceApp.userCartList)
+          .contains(productID)
+      ? Fluttertoast.showToast(msg: "Product already in cart")
+      : addItemToCart(productID, context);
+}
+
+addItemToCart(String productID, BuildContext context) {
+  List tempCartList =
+      EcommerceApp.sharedPreferences.getStringList(EcommerceApp.userCartList);
+  tempCartList.add(productID);
+
+  EcommerceApp.firestore
+      .collection(EcommerceApp.collectionUser)
+      .document(
+        EcommerceApp.sharedPreferences.getString(EcommerceApp.userUID),
+      )
+      .updateData({EcommerceApp.userCartList: tempCartList}).then((value) =>
+          Fluttertoast.showToast(msg: "Item added to cart Successfuly ."));
+  EcommerceApp.sharedPreferences
+      .setStringList(EcommerceApp.userCartList, tempCartList);
+  Provider.of<CartItemCounter>(context, listen: false).displayResult();
+}

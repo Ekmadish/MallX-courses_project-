@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:malX/Models/item.dart';
+import 'package:malX/Store/storehome.dart';
 import 'package:malX/Widgets/customAppBar.dart';
 import 'package:malX/Widgets/myDrawer.dart';
 
@@ -79,7 +80,8 @@ class _ProductPageState extends State<ProductPage> {
                     padding: EdgeInsets.only(top: 8),
                     child: Center(
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () =>
+                            checkItemInCart(widget.iteModel.shortInfo, context),
                         child: Container(
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
