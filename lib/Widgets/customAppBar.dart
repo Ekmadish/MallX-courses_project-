@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:malX/Config/config.dart';
 import 'package:malX/Counters/cartitemcounter.dart';
 import 'package:malX/Store/cart.dart';
 import 'package:provider/provider.dart';
@@ -58,7 +59,13 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
                         child: Consumer<CartItemCounter>(
                             builder: (context, counter, _) {
                           return Text(
-                            counter.count.toString(),
+                            (EcommerceApp.sharedPreferences
+                                        .getStringList(
+                                            EcommerceApp.userCartList)
+                                        .length -
+                                    1)
+                                .toString(),
+                            // counter.count.toString(),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 12.0,

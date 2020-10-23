@@ -22,7 +22,6 @@ class _CartPageState extends State<CartPage> {
   double totalAmount;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     totalAmount = 0;
     Provider.of<TotalAmount>(context, listen: false).displayResult(0);
@@ -74,57 +73,94 @@ class _CartPageState extends State<CartPage> {
             ),
           ),
           StreamBuilder<QuerySnapshot>(
-              stream: EcommerceApp.firestore
-                  .collection("items")
-                  .where("shortInfo",
-                      whereIn: EcommerceApp.sharedPreferences
-                          .getStringList(EcommerceApp.userCartList))
-                  .snapshots(),
-              builder: (context, snapshot) {
-                return !snapshot.hasData
-                    ? SliverToBoxAdapter(
-                        child: Center(
-                          child: circularProgress(),
-                        ),
-                      )
-                    : snapshot.data.documents.length == 0
-                        ? beginBuildingCart()
-                        : SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                                (context, index) {
-                              ItemModel model = ItemModel.fromJson(
-                                  snapshot.data.documents[index].data);
+            stream: EcommerceApp.firestore
+                .collection("items")
+                .where("shortInfo",
+                    whereIn: EcommerceApp.sharedPreferences
+                        .getStringList(EcommerceApp.userCartList))
+                .snapshots(),
+            builder: (context, snapshot) {
+              return !snapshot.hasData
+                  ? SliverToBoxAdapter(
+                      child: Center(
+                        child: circularProgress(),
+                      ),
+                    )
+                  : snapshot.data.documents.length == 0
+                      ? beginBuildingCart()
+                      : SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                            ItemModel model = ItemModel.fromJson(
+                                snapshot.data.documents[index].data);
 
-                              if (index == 0) {
-                                totalAmount = 0;
-                                totalAmount = model.price + totalAmount;
-                              } else {
-                                totalAmount = model.price + totalAmount;
-                              }
+                            if (index == 0) {
+                              totalAmount = 0;
+                              totalAmount = model.price + totalAmount;
+                            } else {
+                              totalAmount = model.price + totalAmount;
+                            }
 
-                              if (snapshot.data.documents.length - 1 == index) {
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((t) {
-                                  Provider.of<TotalAmount>(context,
-                                          listen: false)
-                                      .displayResult(totalAmount);
-                                });
-                              }
-
-                              return sourceInfo(model, context,
-                                  removeCartFuntion: () =>
-                                      removeItemFromUserCart(model.shortInfo));
-                            },
-                                childCount: snapshot.hasData
-                                    ? snapshot.data.documents.length
-                                    : 0),
-                          );
-              }),
+                            if (snapshot.data.documents.length - 1 == index) {
+                              WidgetsBinding.instance.addPostFrameCallback((t) {
+                                Provider.of<TotalAmount>(context, listen: false)
+                                    .displayResult(totalAmount);
+                              });
+                            }
+                            ;
+                            return sourceInfo(model, context,
+                                removeCartFuntion: () =>
+                                    removeItemFromUserCart(model.shortInfo));
+                          },
+                              childCount: snapshot.hasData
+                                  ? snapshot.data.documents.length
+                                  : 0),
+                        );
+            },
+          ),
         ],
       ),
     );
   }
 
-  beginBuildingCart() {}
-  removeItemFromUserCart(String shortInfoId) {}
+  beginBuildingCart() {
+    return SliverToBoxAdapter(
+      child: Card(
+        color: Colors.lightGreen,
+        child: Container(
+          height: 100,
+          child: Column(
+            children: [
+              Icon(
+                Icons.insert_emoticon,
+                color: Colors.white,
+              ),
+              Text("Cart is empty"),
+              Text("Start addiing to youre cart"),
+            ],
+            mainAxisAlignment: MainAxisAlignment.center,
+          ),
+        ),
+      ),
+    );
+  }
+
+  removeItemFromUserCart(String shortInfoId) {
+    List tempCartList =
+        EcommerceApp.sharedPreferences.getStringList(EcommerceApp.userCartList);
+    tempCartList.remove(shortInfoId);
+
+    EcommerceApp.firestore
+        .collection(EcommerceApp.collectionUser)
+        .document(
+          EcommerceApp.sharedPreferences.getString(EcommerceApp.userUID),
+        )
+        .updateData({EcommerceApp.userCartList: tempCartList}).then((value) =>
+            Fluttertoast.showToast(msg: "Item removed Successfuly ."));
+    EcommerceApp.sharedPreferences
+        .setStringList(EcommerceApp.userCartList, tempCartList);
+    Provider.of<CartItemCounter>(context, listen: false).displayResult();
+
+    totalAmount = 0;
+  }
 }
