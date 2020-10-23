@@ -4,23 +4,16 @@ import 'package:malX/Models/item.dart';
 
 import '../Store/storehome.dart';
 
+int counter = 0;
 
-int counter=0;
-class AdminOrderCard extends StatelessWidget
-{
-
+class AdminOrderCard extends StatelessWidget {
   @override
-  Widget build(BuildContext context)
-  {
-    return  InkWell();
+  Widget build(BuildContext context) {
+    return InkWell();
   }
 }
 
-
-
 Widget sourceInfo(ItemModel model, BuildContext context,
-    {Color background})
-{
-
-  return  Container();
+    {Color background, Function() removeCartFuntion}) {
+  return Container();
 }
