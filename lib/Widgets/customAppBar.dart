@@ -55,7 +55,7 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
                     Positioned(
                         top: 3.0,
                         bottom: 4.0,
-                        left: 3,
+                        left: 6.5,
                         child: Consumer<CartItemCounter>(
                             builder: (context, counter, _) {
                           return Text(

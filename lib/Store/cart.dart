@@ -1,15 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:malX/Address/address.dart';
-import 'package:malX/Admin/adminOrderCard.dart';
 import 'package:malX/Config/config.dart';
 import 'package:malX/Counters/cartitemcounter.dart';
 import 'package:malX/Counters/totalMoney.dart';
 import 'package:malX/Models/item.dart';
+import 'package:malX/Store/storehome.dart';
 import 'package:malX/Widgets/customAppBar.dart';
 import 'package:malX/Widgets/loadingWidget.dart';
 import 'package:malX/Widgets/myDrawer.dart';
+
 import 'package:provider/provider.dart';
 import '../main.dart';
 
@@ -20,52 +22,53 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   double totalAmount;
+
   @override
   void initState() {
     super.initState();
+
     totalAmount = 0;
-    Provider.of<TotalAmount>(context, listen: false).displayResult(0);
+    Provider.of<TotalAmount>(context, listen: false).display(0);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
-      drawer: MyDrawer(),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           if (EcommerceApp.sharedPreferences
                   .getStringList(EcommerceApp.userCartList)
                   .length ==
               1) {
-            Fluttertoast.showToast(msg: "Cart id Empty");
+            Fluttertoast.showToast(msg: "Your cart is empty...");
           } else {
             Route route = MaterialPageRoute(
                 builder: (c) => Address(totalAmount: totalAmount));
-            Navigator.push(context, route);
+            Navigator.pushReplacement(context, route);
           }
         },
         label: Text("Check Out"),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.pinkAccent,
         icon: Icon(Icons.navigate_next),
       ),
+      appBar: MyAppBar(),
+      drawer: MyDrawer(),
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
             child: Consumer2<TotalAmount, CartItemCounter>(
               builder: (context, amountProvider, cartProvider, c) {
                 return Padding(
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(8.0),
                   child: Center(
                     child: cartProvider.count == 0
                         ? Container()
                         : Text(
-                            "Total Price T${amountProvider.totalAmount.toString()}",
+                            "Total Price: ₹ ${amountProvider.totalAmount.toString()}",
                             style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                            ),
+                                color: Colors.black,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w500),
                           ),
                   ),
                 );
@@ -87,34 +90,36 @@ class _CartPageState extends State<CartPage> {
                       ),
                     )
                   : snapshot.data.documents.length == 0
-                      ? beginBuildingCart()
+                      ? beginbuildingCart()
                       : SliverList(
                           delegate: SliverChildBuilderDelegate(
-                              (context, index) {
-                            ItemModel model = ItemModel.fromJson(
-                                snapshot.data.documents[index].data);
+                            (context, index) {
+                              ItemModel model = ItemModel.fromJson(
+                                  snapshot.data.documents[index].data);
 
-                            if (index == 0) {
-                              totalAmount = 0;
-                              totalAmount = model.price + totalAmount;
-                            } else {
-                              totalAmount = model.price + totalAmount;
-                            }
+                              if (index == 0) {
+                                totalAmount = 0;
+                                totalAmount = model.price + totalAmount;
+                              } else {
+                                totalAmount = model.price + totalAmount;
+                              }
 
-                            if (snapshot.data.documents.length - 1 == index) {
-                              WidgetsBinding.instance.addPostFrameCallback((t) {
-                                Provider.of<TotalAmount>(context, listen: false)
-                                    .displayResult(totalAmount);
-                              });
-                            }
-                            ;
-                            return sourceInfo(model, context,
-                                removeCartFuntion: () =>
-                                    removeItemFromUserCart(model.shortInfo));
-                          },
-                              childCount: snapshot.hasData
-                                  ? snapshot.data.documents.length
-                                  : 0),
+                              if (snapshot.data.documents.length - 1 == index) {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((t) {
+                                  Provider.of<TotalAmount>(context,
+                                          listen: false)
+                                      .display(totalAmount);
+                                });
+                              }
+                              return sourceInfo(model, context,
+                                  removeCartFunction: () =>
+                                      removeItemFromUserCart(model.shortInfo));
+                            },
+                            childCount: snapshot.hasData
+                                ? snapshot.data.documents.length
+                                : 0,
+                          ),
                         );
             },
           ),
@@ -123,44 +128,48 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  beginBuildingCart() {
+  beginbuildingCart() {
     return SliverToBoxAdapter(
       child: Card(
-        color: Colors.lightGreen,
+        color: Theme.of(context).primaryColor.withOpacity(0.5),
         child: Container(
-          height: 100,
+          height: 100.0,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 Icons.insert_emoticon,
-                color: Colors.white,
+                color: Colors.black,
               ),
-              Text("Cart is empty"),
-              Text("Start addiing to youre cart"),
+              Text("Cart is empty..."),
+              Text("Start adding items to your cart"),
             ],
-            mainAxisAlignment: MainAxisAlignment.center,
           ),
         ),
       ),
     );
   }
 
-  removeItemFromUserCart(String shortInfoId) {
+  removeItemFromUserCart(String shortInfoAsId) {
     List tempCartList =
         EcommerceApp.sharedPreferences.getStringList(EcommerceApp.userCartList);
-    tempCartList.remove(shortInfoId);
+    tempCartList.remove(shortInfoAsId);
 
     EcommerceApp.firestore
         .collection(EcommerceApp.collectionUser)
         .document(
-          EcommerceApp.sharedPreferences.getString(EcommerceApp.userUID),
-        )
-        .updateData({EcommerceApp.userCartList: tempCartList}).then((value) =>
-            Fluttertoast.showToast(msg: "Item removed Successfuly ."));
-    EcommerceApp.sharedPreferences
-        .setStringList(EcommerceApp.userCartList, tempCartList);
-    Provider.of<CartItemCounter>(context, listen: false).displayResult();
+            EcommerceApp.sharedPreferences.getString(EcommerceApp.userUID))
+        .updateData({
+      EcommerceApp.userCartList: tempCartList,
+    }).then((v) {
+      Fluttertoast.showToast(msg: "Item removed from Cart");
 
-    totalAmount = 0;
+      EcommerceApp.sharedPreferences
+          .setStringList(EcommerceApp.userCartList, tempCartList);
+
+      Provider.of<CartItemCounter>(context, listen: false).displayResult();
+
+      totalAmount = 0;
+    });
   }
 }
