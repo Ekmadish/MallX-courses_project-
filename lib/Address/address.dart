@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:malX/Config/config.dart';
 import 'package:malX/Counters/changeAddresss.dart';
 import 'package:malX/Counters/totalMoney.dart';
 import 'package:malX/Models/address.dart';
 import 'package:malX/Orders/placeOrder.dart';
 import 'package:malX/Widgets/customAppBar.dart';
+import 'package:malX/Widgets/loadingWidget.dart';
 import 'package:malX/Widgets/wideButton.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +27,60 @@ class _AddressState extends State<Address> {
     return SafeArea(
       child: Scaffold(
         appBar: MyAppBar(),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.all(8),
+                child: Text(
+                  "select Address",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25),
+                ),
+              ),
+            ),
+            Consumer<AddressChanger>(builder: (context, address, c) {
+              return Flexible(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: EcommerceApp.firestore
+                      .collection(EcommerceApp.collectionUser)
+                      .document(EcommerceApp.sharedPreferences
+                          .getString(EcommerceApp.userUID))
+                      .collection(EcommerceApp.subCollectionAddress)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    return !snapshot.hasData
+                        ? Center(
+                            child: circularProgress(),
+                          )
+                        : snapshot.data.documents.length == 0
+                            ? noAddressCard()
+                            : ListView.builder(
+                                itemCount: snapshot.data.documents.length,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return AddressCard(
+                                    currentIndex: address.count,
+                                    value: index,
+                                    addressId: snapshot
+                                        .data.documents[index].documentID,
+                                    totalAmount: widget.totalAmount,
+                                    model: AddressModel.fromJson(
+                                        snapshot.data.documents[index].data),
+                                  );
+                                },
+                              );
+                  },
+                ),
+              );
+            })
+          ],
+        ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             Navigator.push(
@@ -40,7 +97,22 @@ class _AddressState extends State<Address> {
   }
 
   noAddressCard() {
-    return Card();
+    return Card(
+      color: Colors.green.withOpacity(0.5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.add_location,
+            color: Colors.white,
+          ),
+          Text(
+            "No Address Info has been saved",
+          ),
+          Text("Please add youre address"),
+        ],
+      ),
+    );
   }
 }
 
@@ -69,6 +141,10 @@ class _AddressCardState extends State<AddressCard> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return InkWell(
+      onTap: () {
+        Provider.of<AddressChanger>(context, listen: false)
+            .displayResult(widget.value);
+      },
       child: Card(
         color: Colors.green,
         child: Column(
@@ -151,10 +227,13 @@ class _AddressCardState extends State<AddressCard> {
                 ? WideButton(
                     message: "Proceed",
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (c) => PaymentPage(addressId:widget.addressId,
-                          totalAmount:widget.totalAmount,
-                          )));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (c) => PaymentPage(
+                                    addressId: widget.addressId,
+                                    totalAmount: widget.totalAmount,
+                                  )));
                     },
                   )
                 : Container(),
