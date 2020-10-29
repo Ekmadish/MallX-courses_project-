@@ -15,13 +15,17 @@ class WideButton extends StatelessWidget {
         child: InkWell(
           onTap: onPressed,
           child: Container(
-            decoration: BoxDecoration(color: Colors.green),
+            decoration: BoxDecoration(color: Colors.white),
             width: MediaQuery.of(context).size.width * 0.85,
             height: 50,
-            child: Text(
-              message,
-              style: TextStyle(
-                color: Colors.white,
+            child: Center(
+              child: Text(
+                message,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
             ),
           ),

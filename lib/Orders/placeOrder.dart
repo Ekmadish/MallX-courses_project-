@@ -20,7 +20,43 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
-    return Material();
+    return Material(
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              colors: [Colors.grey, Colors.green],
+              begin: const FractionalOffset(0.0, 0.0),
+              end: const FractionalOffset(0.0, 0.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8),
+                child: Image.asset("images/cash.png"),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              FlatButton(
+                onPressed: addOrderDetails(),
+                color: Colors.white,
+                textColor: Colors.white,
+                child: Text(
+                  "Place Order",
+                  style: TextStyle(fontSize: 30),
+                ),
+                padding: EdgeInsets.all(0),
+                splashColor: Colors.white,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   addOrderDetails() {
