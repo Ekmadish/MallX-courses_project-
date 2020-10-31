@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -5,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:malX/Address/address.dart';
 import 'package:malX/Config/config.dart';
 import 'package:malX/Models/address.dart';
+import 'package:malX/Widgets/loadingWidget.dart';
+import 'package:malX/Widgets/orderCard.dart';
 import 'package:malX/main.dart';
 
 String getOrderId = "";
@@ -16,8 +19,113 @@ class OrderDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    getOrderId = orderID;
     return SafeArea(
-      child: Scaffold(),
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: FutureBuilder<DocumentSnapshot>(
+            future: EcommerceApp.firestore
+                .collection(EcommerceApp.collectionUser)
+                .document(EcommerceApp.sharedPreferences
+                    .getString(EcommerceApp.userUID))
+                .collection(EcommerceApp.collectionOrders)
+                .document(orderID)
+                .get(),
+            builder: (c, snapshot) {
+              Map dataMap;
+
+              if (snapshot.hasData) {
+                dataMap = snapshot.data.data;
+              }
+
+              return snapshot.hasData
+                  ? Container(
+                      child: Column(
+                        children: [
+                          StatusBanner(
+                            status: dataMap[EcommerceApp.isSuccess],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(4),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Totao Price" +
+                                    dataMap[EcommerceApp.totalAmount]
+                                        .toString(),
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(4),
+                            child: Text("Order  ID : " + getOrderId),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(4),
+                            child: Text(
+                              "Ordered at : " +
+                                  DateFormat("dd MMMM ,yyyy -hh:mm aa").format(
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                      int.parse((dataMap["orderTime"])),
+                                    ),
+                                  ),
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 16),
+                            ),
+                          ),
+                          Divider(),
+                          FutureBuilder<QuerySnapshot>(
+                            builder: (c, dataSnapShot) {
+                              return dataSnapShot.hasData
+                                  ? OrderCard(
+                                      itemCount:
+                                          dataSnapShot.data.documents.length,
+                                      data: dataSnapShot.data.documents,
+                                    )
+                                  : Center(
+                                      child: circularProgress(),
+                                    );
+                            },
+                            future: EcommerceApp.firestore
+                                .collection("items")
+                                .where("shortInfo",
+                                    whereIn: dataMap[EcommerceApp.productID])
+                                .getDocuments(),
+                          ),
+                          Divider(
+                            height: 2,
+                          ),
+                          FutureBuilder<DocumentSnapshot>(
+                            future: EcommerceApp.firestore
+                                .collection(EcommerceApp.collectionUser)
+                                .document(EcommerceApp.sharedPreferences
+                                    .getString(EcommerceApp.userUID))
+                                .collection(EcommerceApp.subCollectionAddress)
+                                .document(dataMap[EcommerceApp.addressID])
+                                .get(),
+                            builder: (c, snap) {
+                              return snap.hasData
+                                  ? ShippingDetails(model: AddressModel.fromJson(snap.data.data),)
+                                  : Center(
+                                      child: circularProgress(),
+                                    );
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                  : Center(
+                      child: circularProgress(),
+                    );
+            },
+          ),
+        ),
+      ),
     );
   }
 }
