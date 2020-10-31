@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:malX/main.dart';
 import '../Widgets/customAppBar.dart';
-
-class SearchService {}
 
 class SearchProduct extends StatefulWidget {
   @override
@@ -13,7 +11,21 @@ class SearchProduct extends StatefulWidget {
 class _SearchProductState extends State<SearchProduct> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea();
+    return SafeArea(
+      child: Scaffold(
+        appBar: MyAppBar(
+          bottom: PreferredSize(
+            child: searchWidget(),
+            preferredSize: Size(56, 56),
+          ),
+        ),
+      ),
+    );
+  }
+
+  searchWidget() {
+
+    return 
   }
 }
 

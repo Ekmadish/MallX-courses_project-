@@ -115,7 +115,7 @@ class OrderDetails extends StatelessWidget {
                                       child: circularProgress(),
                                     );
                             },
-                          ),
+                          ),  
                         ],
                       ),
                     )
