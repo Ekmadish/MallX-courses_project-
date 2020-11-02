@@ -109,12 +109,15 @@ class OrderDetails extends StatelessWidget {
                                 .get(),
                             builder: (c, snap) {
                               return snap.hasData
-                                  ? ShippingDetails(model: AddressModel.fromJson(snap.data.data),)
+                                  ? ShippingDetails(
+                                      model:
+                                          AddressModel.fromJson(snap.data.data),
+                                    )
                                   : Center(
                                       child: circularProgress(),
                                     );
                             },
-                          ),  
+                          ),
                         ],
                       ),
                     )
@@ -130,59 +133,59 @@ class OrderDetails extends StatelessWidget {
 }
 
 class StatusBanner extends StatelessWidget {
-  final bool status;
+    final bool status;
 
-  const StatusBanner({Key key, this.status}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    String msg;
-    IconData iconData;
+    const StatusBanner({Key key, this.status}) : super(key: key);
+    @override
+    Widget build(BuildContext context) {
+      String msg;
+      IconData iconData;
 
-    status ? iconData = Icons.done : iconData = Icons.cancel;
-    status ? msg = "Successful" : msg = "UnSuccessful";
+      status ? iconData = Icons.done : iconData = Icons.cancel;
+      status ? msg = "Successful" : msg = "UnSuccessful";
 
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-            colors: [Colors.grey, Colors.green],
-            begin: const FractionalOffset(0.0, 0.0),
-            end: const FractionalOffset(0.0, 0.0),
-            stops: [0.0, 1.0],
-            tileMode: TileMode.clamp),
-      ),
-      height: 40,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Icon(Icons.arrow_drop_down_circle),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          Text(
-            "Order placed" + msg,
-            style: TextStyle(color: Colors.white),
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          CircleAvatar(
-            radius: 8,
-            backgroundColor: Colors.grey,
-            child: Center(
-              child: Icon(
-                iconData,
-                color: Colors.white,
-                size: 14,
+      return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              colors: [Colors.grey, Colors.green],
+              begin: const FractionalOffset(0.0, 0.0),
+              end: const FractionalOffset(0.0, 0.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp),
+        ),
+        height: 40,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Icon(Icons.arrow_drop_down_circle),
+            ),
+            SizedBox(
+              width: 20,
+            ),
+            Text(
+              "Order placed" + msg,
+              style: TextStyle(color: Colors.white),
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            CircleAvatar(
+              radius: 8,
+              backgroundColor: Colors.grey,
+              child: Center(
+                child: Icon(
+                  iconData,
+                  color: Colors.white,
+                  size: 14,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
+    }
 }
 
 class ShippingDetails extends StatelessWidget {

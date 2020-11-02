@@ -51,7 +51,7 @@ class _UploadPageState extends State<UploadPage>
           ),
           onPressed: () {
             Route route = MaterialPageRoute(builder: (c) => AdminShiftOrders());
-            Navigator.pushReplacement(context, route);
+            Navigator.push(context, route);
           },
         ),
         actions: [

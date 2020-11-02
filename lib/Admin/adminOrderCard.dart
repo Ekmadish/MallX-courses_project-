@@ -10,6 +10,7 @@ class AdminOrderCard extends StatelessWidget {
   final int itemCount;
   final List<DocumentSnapshot> data;
   final String orderID;
+
   final String addressID;
   final String orderBy;
 
@@ -30,7 +31,10 @@ class AdminOrderCard extends StatelessWidget {
           counter = counter + 1;
           route = MaterialPageRoute(
             builder: (c) => AdminOrderDetails(
-                orderID: orderID, orderby: orderBy, addressID: addressID),
+              orderID: orderID,
+              orderby: orderBy,
+              addressID: addressID,
+            ),
           );
         }
         Navigator.push(context, route);

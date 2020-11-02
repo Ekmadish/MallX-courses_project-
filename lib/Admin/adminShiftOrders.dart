@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:malX/Admin/adminOrderCard.dart';
 import 'package:malX/Config/config.dart';
 import 'package:malX/Widgets/loadingWidget.dart';
+import 'package:malX/Widgets/orderCard.dart';
 
 class AdminShiftOrders extends StatefulWidget {
   @override
@@ -55,13 +56,13 @@ class _MyOrdersState extends State<AdminShiftOrders> {
                             return snap.hasData
                                 ? AdminOrderCard(
                                     data: snap.data.documents,
-                                    orderID:
-                                        snap.data.documents[index].documentID,
+                                    orderID: snapshot
+                                        .data.documents[index].documentID,
                                     itemCount: snap.data.documents.length,
-                                    orderBy: snap
+                                    orderBy: snapshot
                                         .data.documents[index].data["orderBy"],
-                                    addressID: snap.data.documents[index]
-                                        .data["productIDs"],
+                                    addressID: snapshot.data.documents[index]
+                                        .data["addressID"],
                                   )
                                 : Center(
                                     child: circularProgress(),
