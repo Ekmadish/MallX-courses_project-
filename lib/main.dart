@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:malX/Address/address.dart';
+import 'Widgets/theme.dart';
 import 'package:malX/Authentication/authenication.dart';
 import 'package:malX/Config/config.dart';
 import 'package:malX/Counters/ItemQuantity.dart';
@@ -27,20 +28,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (c) => CartItemCounter()),
-        ChangeNotifierProvider(create: (c) => ItemQuantityCounter()),
-        ChangeNotifierProvider(create: (c) => AddressChanger()),
-        ChangeNotifierProvider(create: (c) => TotalAmount()),
-      ],
-      child: MaterialApp(
-          title: 'malX',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primaryColor: Colors.green,
+        providers: [
+          ChangeNotifierProvider(create: (c) => ThemeNotifire()),
+          ChangeNotifierProvider(create: (c) => CartItemCounter()),
+          ChangeNotifierProvider(create: (c) => ItemQuantityCounter()),
+          ChangeNotifierProvider(create: (c) => AddressChanger()),
+          ChangeNotifierProvider(create: (c) => TotalAmount()),
+        ],
+        child: Consumer<ThemeNotifire>(
+          builder: (context, ThemeNotifire notifire, child) => MaterialApp(
+            title: 'mallX',
+            debugShowCheckedModeBanner: false,
+            theme: notifire.darkTheme ? dark : light,
+            home: SplashScreen(),
           ),
-          home: SplashScreen()),
-    );
+        ));
   }
 }
 

@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:malX/Admin/adminOrderCard.dart';
 import 'package:malX/Config/config.dart';
 import 'package:malX/Counters/cartitemcounter.dart';
 import 'package:malX/Store/cart.dart';
@@ -14,6 +11,7 @@ import '../Widgets/loadingWidget.dart';
 import '../Widgets/myDrawer.dart';
 import '../Widgets/searchBox.dart';
 import '../Models/item.dart';
+import 'package:malX/Widgets/theme.dart';
 
 double width;
 
@@ -42,11 +40,25 @@ class _StoreHomeState extends State<StoreHome> {
             title: Text(
               'MallX',
               style: TextStyle(
-                  fontSize: 18, color: Colors.white, fontFamily: 'Signatra'),
+                  fontSize: 24, color: Colors.white, fontFamily: 'Signatra'),
             ),
             centerTitle: true,
             actions: [
+              Align(
+                child: Consumer<ThemeNotifire>(
+                  builder: (context, ThemeNotifire notifire, child) =>
+                      IconButton(
+                          icon: notifire.darkTheme
+                              ? Icon(Icons.wb_sunny)
+                              : Icon(Icons.nights_stay),
+                          onPressed: () {
+                            notifire.ToggleTheme();
+                          }),
+                ),
+              ),
               Stack(
+                // alignment: Alignment.bottomCenter,
+
                 children: [
                   IconButton(
                     onPressed: () {
